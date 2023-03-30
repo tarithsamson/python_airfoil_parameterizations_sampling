@@ -19,7 +19,11 @@ The PARSEC function uses the input parameters to calculate the shape of the airf
 The Parsec Airfoil Parametrization Method
 ==========================================
 
-The Parsec method is a parameterization method that uses a combination of polynomial functions and Fourier series to describe the shape of an airfoil. The method is based on the idea that the airfoil shape can be approximated by a series of curves, each of which is described by a set of parameters.
+The PARSEC airfoil parameterization was developed by Sobieczky4(1998). The PARSEC method uses well-defined geometric param-1eters,  such  as  the  leading-edge  (LE)  radius  and  airfoil  thickness.2The parameters, therefore, have a specific meaning and may appeal3more to the airfoil designer. Moreover, a baseline airfoil shape is not needed.
+In  the  PARSEC  method,  the  upper  surface  of  the  airfoil  isdescribed by a sixth order polynomial:
+.. math::
+
+    z_{u}(x) = \sum_{i=1}^n a_i x^{2i-1} + \sum_{i=0}^{m-1} b_i \sin(\pi i x) + c
 
 The basic equation for the Parsec method is:
 
