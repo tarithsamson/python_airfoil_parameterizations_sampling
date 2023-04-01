@@ -36,7 +36,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Generate surface points for the RAE 2822 airfoil surface via the CST parametrization method with 150 points on each surface
-#               aUp1        aUp2        aUp3        aUp4        aUp5       aLw1       aLw2       aLw3      aLw4       aLw5                                                             
+#              x1       x2       x3       x4       x5      x6       x7        y1    y2       y3       y4       y5       y6       y7               
 X = np.array([-0.130048,  -0.133146,  -0.228736,  -0.0734107,  0.0378001, 0.127495,  0.140408,  0.1886,   0.194971,  0.200752])
 
 xu,zu,xl,zl = CST(X,150)
