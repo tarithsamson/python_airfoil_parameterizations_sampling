@@ -10,7 +10,11 @@ The CST method assumes that the airfoil shape can be described by two separate f
 The Bernstein polynomials are defined as follows:
 
 .. math::
-B_{i,n}(x) = \binom{n}{i} x^i (1-x)^{n-i}
+
+    S(x)=\sum_{j=0}^{n-1} c_j B_{j, k ; t}(x)
+
+where :math:B_{j, k ; t} are B-spline basis functions of degree :math:k and knots :math:t.
+
 where :math:i is the degree of the polynomial, :math:n is the total degree of the polynomial, and :math:x is the independent variable.
 
 In the CST method, the shape of the airfoil is defined by a set of coefficients :math:a_i and :math:b_i that determine the weights of the Bernstein polynomials for the upper and lower surfaces, respectively. The coefficients are chosen so that the resulting airfoil shape satisfies certain constraints, such as the location of the maximum thickness and the amount of camber.
@@ -19,7 +23,8 @@ The CST method also allows for the inclusion of a thickness distribution functio
 
 The CST method is implemented in the following Python function:
 
-.. code-block:: python
+.. code-block:: 
+
     def CST(X,N,xdist=None):
     """
     Compute the upper and lower surfaces of a CST airfoil given a set of control
