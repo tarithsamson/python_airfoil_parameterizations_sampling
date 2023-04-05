@@ -1,7 +1,10 @@
 .. _CST_parametrization_method:
 
-CST Parametrization Method
-============================
+CST Airfoil Parametrization Method
+======================================
+
+Introduction
+------------   
 
 The CST (Class Shape Transformation) airfoil parametrization method is a mathematical model that describes the shape of an airfoil using a set of control points. The shape of the airfoil is defined by a polynomial curve that passes through these control points.
 
@@ -53,3 +56,16 @@ x: A 1D array of x-coordinates for the upper and lower surface points.
 zu: A (N, dp) array of y-coordinates for the upper surface points.
 zl: A (N, dp) array of y-coordinates for the lower surface points.
 The CST function first generates a set of x-coordinates based on the input xdist or using the np.linspace function. It then computes the upper and lower surface functions by evaluating the Bernstein polynomials at each of these x-coordinates using the
+
+CST.py
+--------------
+
+CST_fit.py
+--------------
+
+Example: Fitting a CST surface to an airfoil using CST_fit.py
+--------------------------------------------------------------
+
+
+Example: Creating a RAE2822 airfoil with CST.py
+--------------------------------------------------

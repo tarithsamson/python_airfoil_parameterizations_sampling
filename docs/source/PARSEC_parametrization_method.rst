@@ -1,7 +1,10 @@
 .. _PARSEC_parametrization_method:
 
-The Parsec Airfoil Parametrization Method
+Parsec Airfoil Parametrization Method
 ==========================================
+
+Introduction
+------------   
 
 The PARSEC airfoil parameterization was developed by Sobieczky in 1998. 
 
@@ -150,8 +153,8 @@ the parameters can be fixed during an optimization. For example, setting
 work only on the upper or the lower surface.
 
 
-PARSEC Parametrization Method
-================================
+PARSEC.py
+-----------------------------
 
 The code provided is for the PARSEC airfoil surface generation method. This method is used to generate the coordinates of the upper and lower surfaces of an airfoil based on a set of design variables. The PARSEC method uses polynomial equations to define the shape of the airfoil.
 
@@ -166,8 +169,15 @@ zu: a numpy array of shape (N, n) containing the coordinates of the upper surfac
 zl: a numpy array of shape (N, n) containing the coordinates of the lower surface of the airfoil. Each column represents an individual airfoil.
 The PARSEC function uses the input parameters to calculate the shape of the airfoil using polynomial equations. The function then generates N points on the airfoil surface using these equations. The resulting zu and zl arrays contain the coordinates of these surface points for each airfoil in the input array.
 
-Example: Creating a RAE2822 airfoil with PARSEC
-===============================================
+PARSEC_fit.py
+--------------
+
+Example: Fitting a PARSEC surface to an airfoil using PARSEC_fit.py
+--------------------------------------------------------------------
+
+
+Example: Creating a RAE2822 airfoil with PARSEC.py
+--------------------------------------------------
 
 Here's an example Python code snippet that uses the PARSC pararmetrization method to generate points for the RAE 2822 airfoil with an arbirtary x point distribution function with 100 points:
 
