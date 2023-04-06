@@ -5,49 +5,18 @@ from readairfoil import *
 from scipy.stats import qmc
 from visualization import *
 
-# def BSpline(X,N,xdist=None):    
-#     #--------------------------------------------------------------------------
-#     # Input processing
-#     #--------------------------------------------------------------------------
-#     if len(X.shape)==1:
-#         n=1
-#     else:
-#         nc,n = X.shape # number of airfoils is the length of the input matrix X
-        
-#     zu = np.zeros((N,n)) # initializing an (n samples) x (N airfoil points) matrix of zeros for the airfoil upper surface
-#     zl = np.zeros((N,n)) # initializing an (n samples) x (N airfoil points) matrix of zeros for the airfoil lower surface
-    
-#     #--------------------------------------------------------------------------
-#     # x-data generation
-#     #--------------------------------------------------------------------------
-#     if xdist is not None:
-#         if N!=len(xdist):
-#             print('Error. N doesn\'t match length of xdist')
-#             return
-#         elif N==len(xdist):
-#             xu = xdist
-#             xl = xdist
-#     else:
-#         xdist = np.linspace(0,1,N)
-#         xu = xdist
-#         xl = xdist
+def Bspline(cp_u, cp_l, knots=None, degree=3)
 
-#     tck, u = interpolate.splprep(X.T, k=3)
-#     xnew = np.linspace(0, 1, N)
-#     out = interpolate.splev(xnew, tck)
-#     x, z = out[0], out[1]
+    if knots is None:
+        knots = np.linspace(0, 1, len(cp_u)) # Define knot vector (uniformly spaced)
 
-#     return x, z
+    # Create B-spline object
+    ubs = interpolate.make_interp_spline(knots, us, k=degree)
+    lbs = interpolate.make_interp_spline(knots, ls, k=degree)
 
-num_points = 10
-x_coords = np.linspace(0, 1, num_points)
-y_coords = np.sin(x_coords * np.pi)
+    # Evaluate B-spline at new points
+    new_points = np.linspace(0, 1, 100)
+    ubspnts = ubs(new_points)
+    lbspnts = lbs(new_points)
 
-n_points = 100
-X = np.column_stack((x_coords, y_coords))
-tck, u = interpolate.splprep(X.T, k=3)
-xnew = np.linspace(0, 1, n_points)
-out = interpolate.splev(xnew, tck)
-x, z = out[0], out[1]
-
-plt.plot(x,z)
+    return ubspnts, lbspnts
