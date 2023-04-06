@@ -24,11 +24,14 @@ B-spline basis elements are defined via
     B_{i, k}(x)=\frac{x-t_i}{t_{i+k}-t_i} B_{i, k-1}(x)+\frac{t_{i+k+1}-x}{t_{i+k+1}-t_{i+1}} B_{i+1, k-1}(x)
     \end{array}
 
+This code uses Scipy's implementation of the B-spline basis functions to both fit a B-spline to an airfoil and to create a new airfoil from a set of control points. More information can be found in the Scipy documentation: https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html 
 BSpline.py
 --------------
 
+
 BSpline_fit.py
 --------------
+BSpline_fit.py is a script that fits a B-spline to an airfoil. The script takes in a set of control points and a set of knots and fits a B-spline to the airfoil. 
 
 Example: Fitting a BSpline to an airfoil using BSpline_fit.py
 --------------------------------------------------------------
