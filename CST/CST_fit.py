@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import airfoilGeoLib as geo
+import CST.airfoilGeoLib as geo
 
 
 def CST_fit(airfoil,dp,N,xdist=None):

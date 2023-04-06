@@ -15,6 +15,7 @@ N = 7 # number of points describing each of the airfoil's upper and lower surfac
 xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
 xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ); # generating N-1 x values from 0 to 1 whose distribution follows the formula
 xu,zu,xl,zl = readairfoil(airfoil,xdist=xdist) # load airfoil with the following distribution
+
 # Create B-spline object
 ubs = interpolate.make_interp_spline(knots, us, k=degree)
 lbs = interpolate.make_interp_spline(knots, ls, k=degree)

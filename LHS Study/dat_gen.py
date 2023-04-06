@@ -5,8 +5,8 @@ from lhsbounds import *
 from lhs import *
 from postprocess import *
 from visualization import *
-from PARSEC import *
-from CST import *
+from PARSEC.PARSEC import *
+from CST.CST import *
 from BSpline import *
 
 

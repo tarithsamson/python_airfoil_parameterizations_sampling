@@ -155,45 +155,85 @@ work only on the upper or the lower surface.
 
 PARSEC.py
 -----------------------------
-
-The code provided is for the PARSEC airfoil surface generation method. This method is used to generate the coordinates of the upper and lower surfaces of an airfoil based on a set of design variables. The PARSEC method uses polynomial equations to define the shape of the airfoil.
+This function is used to generate a PARSEC surface given a set of input parameters. 
 
 The input parameters to the PARSEC function are:
 
-X: a numpy array of shape (10, n) or (10,), where n is the number of airfoils to generate. The shape (10, n) is a structured array where each column represents the design variables for an individual airfoil. The shape (10,) is an unstructured array where the elements represent the design variables for a single airfoil.
-N: an integer representing the number of points to generate on the airfoil surface.
-xdist: an optional parameter that can be used to specify the x-coordinates at which the airfoil surface points should be generated. If this parameter is not provided, the points will be generated uniformly between 0 and 1.
-The output of the PARSEC function are:
+- **X**: a 1-D list or array where ``X=[x_U, z_U, z_xxU, R_U, x_L, z_L, z_xxL, R_L, theta_TE, beta_TE]``  
+- **N**: an int that specifies the number of points to generate on the upper and lower surfaces
+- **xdist**: a 1-D numpy array of x-coordinates at which the upper and lower surfaces are evaluated. If this parameter is not provided, the points will be generated uniformly between 0 and 1.
 
-zu: a numpy array of shape (N, n) containing the coordinates of the upper surface of the airfoil. Each column represents an individual airfoil.
-zl: a numpy array of shape (N, n) containing the coordinates of the lower surface of the airfoil. Each column represents an individual airfoil.
-The PARSEC function uses the input parameters to calculate the shape of the airfoil using polynomial equations. The function then generates N points on the airfoil surface using these equations. The resulting zu and zl arrays contain the coordinates of these surface points for each airfoil in the input array.
+The outputs of the PARSEC function are:
 
-PARSEC_fit.py
---------------
-
-Example: Fitting a PARSEC surface to an airfoil using PARSEC_fit.py
---------------------------------------------------------------------
-
+- **xu**: a 1-D numpy array of the x-coordinates of the upper surface
+- **zu**: a 1-D numpy array of the z-coordinates of the upper surface
+- **xl**: a 1-D numpy array of the x-coordinates of the lower surface
+- **zl**: a 1-D numpy array of the z-coordinates of the lower surface
 
 Example: Creating a RAE2822 airfoil with PARSEC.py
 --------------------------------------------------
 
-Here's an example Python code snippet that uses the PARSC pararmetrization method to generate points for the RAE 2822 airfoil with an arbirtary x point distribution function with 100 points:
+Here's an example Python code snippet that uses the PARSEC pararmetrization method to generate points for the RAE 2822 airfoil with an arbirtary x point distribution function with 30 points on each surface:
 
 .. code-block::
 
-    from PARSEC import *
-    import numpy as np
-    import matplotlib.pyplot as plt
+   # import packages
+   from readairfoil import * 
+   from PARSEC import *
+   import numpy as np
+   import matplotlib.pyplot as plt
 
-    # Generate surface points for the RAE 2822 airfoil surface via the PARSEC parametrization method
+   #              xu      zu       z_xxU    R_U      xl       zl       z_xxL    R_L       t_TE     b_TE
+   X = np.array([0.4306,  0.0629, -0.4272,  0.0081,  0.3438, -0.0589,  0.7008,  0.0085,  -6.7582,  9.1863])
 
-    #              xu      zu       z_xxU    R_U      xl       zl       z_xxL    R_L #     t_TE     b_TE
-    X = np.array([0.4306,  0.0629, -0.4272,  0.0081,  0.3438, -0.0589,  0.7008,  0.0085,  -6.7582,  9.1863])
+   N = 30 # number of points on each surface
 
-    xu,zu,xl,zl = PARSEC(X,150)
-    plt.plot(xu,zu,label='Upper Surface') # upper surface points          
-    plt.plot(xl,zl,label='Lower Surface') # lower surface points          
-    plt.legend()
-    plt.show()
+   xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
+   xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ) # generating N-1 x values from 0 to 1 whose distribution follows the formula
+
+   xu,zu,xl,zl = PARSEC(X,N,xdist) # generate surface points using the PARSEC parametrization method
+
+   plt.plot(xu,zu,marker='o',label='Upper Surface') # upper surface points          
+   plt.plot(xl,zl,marker='o',label='Lower Surface') # lower surface points          
+   plt.legend()
+   plt.show()
+
+PARSEC_fit.py
+--------------
+
+This function is used to fit PARSEC parameters to a set of airfoil coordinates. 
+
+The input parameters to the PARSEC_fit function are:
+
+- **xu**: a 1-D numpy array of the x-coordinates of the upper surface of the target airfoil
+- **zu**: a 1-D numpy array of the z-coordinates of the upper surface of the target airfoil
+- **xl**: a 1-D numpy array of the x-coordinates of the lower surface of the target airfoil
+- **zl**: a 1-D numpy array of the z-coordinates of the lower surface of the target airfoil
+
+
+The outputs of the PARSEC function are:
+
+- **X**: a 1-D list or array where ``X=[x_U, z_U, z_xxU, R_U, x_L, z_L, z_xxL, R_L, theta_TE, beta_TE]``
+
+
+Example: Fitting a PARSEC surface to an airfoil using PARSEC_fit.py
+--------------------------------------------------------------------
+
+Here's an example Python code snippet that uses the PARSEC_fit.py to fit a PARSEC surface to an RAE2822 airfoil:
+
+.. code-block::
+
+   # import packages
+   from readairfoil import * 
+   from PARSEC_fit import *
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from readairfoil import *
+
+   airfoil = 'rae2822' # airfoil .dat name
+   N = 100 # number of points describing each of the airfoil's upper and lower surfaces
+   xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
+   xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ); # generating N-1 x values from 0 to 1 whose distribution follows the formula
+   xu,zu,xl,zl = readairfoil(airfoil,xdist=xdist) # load airfoil with the following distribution
+
+   X = PARSEC_fit(xu,zu,xl,zl,N,xdist) # fit PARSEC surface to airfoil

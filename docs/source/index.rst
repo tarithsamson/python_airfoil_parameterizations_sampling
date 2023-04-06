@@ -7,7 +7,7 @@ Table of Contents
    :maxdepth: 3
 
    introduction
-   required_packages
+   readairfoil
    PARSEC_parametrization_method
    CST_parametrization_method
    BSpline_parametrization_method
