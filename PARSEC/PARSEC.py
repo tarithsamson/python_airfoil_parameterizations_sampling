@@ -65,24 +65,24 @@ def PARSEC(X,N,xdist=None):
     # 'v' coefficient matrix
     v = np.array([z_L, 0, z_xxL, T_off- 0.5*T_TE, np.tan(np.radians(theta_TE+0.5*beta_TE)), -np.sqrt(2*R_L)]) 
     
-    a = np.linalg.lstsq(P,q)[0]
-    b = np.linalg.lstsq(E,v)[0]
+    # a = np.linalg.lstsq(P,q)[0]
+    # b = np.linalg.lstsq(E,v)[0]
 
-    # if det(P)==0:
-    #     #print('det(P)=0')
-    #     a = lstsq(P,q)
-    # else:
-    #     #print('det(P)!=%f'%det(P))
-    #     # solve for coefficients of polynomial
-    #     a = np.dot(inv(P),q)
+    if det(P)==0:
+        #print('det(P)=0')
+        a = lstsq(P,q)
+    else:
+        #print('det(P)!=%f'%det(P))
+        # solve for coefficients of polynomial
+        a = np.dot(inv(P),q)
     
-    # if det(E)==0:
-    #     #print('det(E)=0')
-    #     b = lstsq(E,v)
-    # else:
-    #     #print('det(E)!=%f'%det(E))
-    #     # solve for coefficients of polynomial
-    #     b = np.dot(inv(E),v)
+    if det(E)==0:
+        #print('det(E)=0')
+        b = lstsq(E,v)
+    else:
+        #print('det(E)!=%f'%det(E))
+        # solve for coefficients of polynomial
+        b = np.dot(inv(E),v)
     
     zu = np.zeros(N) # upper surface coords
     zl = np.zeros(N) # lower surface coords
