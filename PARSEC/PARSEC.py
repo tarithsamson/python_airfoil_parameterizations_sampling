@@ -20,22 +20,21 @@ def PARSEC(X,N,xdist=None):
     #--------------------------------------------------------------------------
     # Input parameters
     #--------------------------------------------------------------------------
-
     # upper surface DVs
-    x_U = X[0]  # x coord of maximum z coord of the upper surface
-    z_U = X[1] # maximum z coord of the upper surface
-    z_xxU = X[2] # curvature of upper surface at maximum z-coord
-    R_U = X[3] # LE radius of the upper surface 
+    x_U = X[0]      # x coord of maximum z coord of the upper surface
+    z_U = X[1]      # maximum z coord of the upper surface
+    z_xxU = X[2]    # curvature of upper surface at maximum z-coord
+    R_U = X[3]      # LE radius of the upper surface 
     # lower surface DVs
-    x_L = X[4] # x coord of maximum z coord of the upper surface
-    z_L = X[5] # maximum z coord of the upper surface
-    z_xxL = X[6] # curvature of lower surface at minimum z-coord
-    R_L = X[7] # LE radius of the upper surface
+    x_L = X[4]      # x coord of maximum z coord of the upper surface
+    z_L = X[5]      # maximum z coord of the upper surface
+    z_xxL = X[6]    # curvature of lower surface at minimum z-coord
+    R_L = X[7]      # LE radius of the upper surface
     # TE DVs
     theta_TE = X[8] # TE angle (measured from the horizontal) in radians
-    beta_TE = X[9] # TE wedge angle in radians
-    T_off = 0.0  # TE offset
-    T_TE = 0.0   # TE thickness
+    beta_TE = X[9]  # TE wedge angle in radians
+    T_off = X[10]  # TE offset
+    T_TE = X[11]   # TE thickness
 
     #--------------------------------------------------------------------------
     # PARSEC airfoil surface generation
@@ -65,24 +64,24 @@ def PARSEC(X,N,xdist=None):
     # 'v' coefficient matrix
     v = np.array([z_L, 0, z_xxL, T_off- 0.5*T_TE, np.tan(np.radians(theta_TE+0.5*beta_TE)), -np.sqrt(2*R_L)]) 
     
-    # a = np.linalg.lstsq(P,q)[0]
-    # b = np.linalg.lstsq(E,v)[0]
+    a = np.linalg.lstsq(P,q)[0]
+    b = np.linalg.lstsq(E,v)[0]
 
-    if det(P)==0:
-        #print('det(P)=0')
-        a = lstsq(P,q)
-    else:
-        #print('det(P)!=%f'%det(P))
-        # solve for coefficients of polynomial
-        a = np.dot(inv(P),q)
+    # if det(P)==0:
+    #     #print('det(P)=0')
+    #     a = lstsq(P,q)
+    # else:
+    #     #print('det(P)!=%f'%det(P))
+    #     # solve for coefficients of polynomial
+    #     a = np.dot(inv(P),q)
     
-    if det(E)==0:
-        #print('det(E)=0')
-        b = lstsq(E,v)
-    else:
-        #print('det(E)!=%f'%det(E))
-        # solve for coefficients of polynomial
-        b = np.dot(inv(E),v)
+    # if det(E)==0:
+    #     #print('det(E)=0')
+    #     b = lstsq(E,v)
+    # else:
+    #     #print('det(E)!=%f'%det(E))
+    #     # solve for coefficients of polynomial
+    #     b = np.dot(inv(E),v)
     
     zu = np.zeros(N) # upper surface coords
     zl = np.zeros(N) # lower surface coords
