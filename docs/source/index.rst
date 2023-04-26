@@ -12,3 +12,4 @@ Table of Contents
    CST_parametrization_method
    BSpline_parametrization_method
    lhs_study
+   visualization

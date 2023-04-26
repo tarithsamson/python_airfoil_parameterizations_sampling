@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from readairfoil import *
-from PARSEC import *
-from PARSEC_fit import *
-from PARSEC_fit_obj import *
+from CST import *
+from CST_fit import *
 
 #------------------------------------------------------------------------------
 # Load target airfoil

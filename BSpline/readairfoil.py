@@ -1,5 +1,5 @@
 # python script that reads selig and lednicer airfoil .dat files into upper and lower surfaces
-# please note that some lednicer .dat files have positive y values as part of their lower surface it is recommended to use selig format
+# please note that some as lednicer .dat files have positive y values as part of their lower surface it is recommended to use selig format
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -14,7 +14,6 @@ def readairfoil(airfoil,f='selig',DIR = '/home/tarith/Documents/work/uiuc_airfoi
         #airfoil_desc = np.loadtxt(airfoil+'.dat',dtype=str,max_rows=1) # use numpy module loadtxt to read the descriptive airfoil name from the first row
         S = np.loadtxt(airfoil+'.dat',usecols=(0,1),skiprows=1,max_rows=1) # use numpy module loadtxt to read the numer of points on the upper andlower surface from the second row 
         US = S[0] # index the number of points on the upper surface
-        LS = S[1] # index the number of points on the lower surface
         # index the x and z coords from airfoil_data to separate the x and z cords associated with the upper and lower surfaces 
         xu = airfoil_data[:int(US),0]
         zu = airfoil_data[:int(US),1]
@@ -29,11 +28,11 @@ def readairfoil(airfoil,f='selig',DIR = '/home/tarith/Documents/work/uiuc_airfoi
         #airfoil_desc = np.loadtxt(airfoil+'.dat',dtype=str,max_rows=1) # use numpy module loadtxt to read the descriptive airfoil name from the first row
         US = np.argmax(airfoil_data[:,1]<0) # finding the index of the point at which the z values become negative; up to this point are points on the upper surface
         # index the x and z coords from airfoil_data to separate the x and z cords associated with the upper and lower surfaces 
-        #print(US)
         xu = airfoil_data[:int(US),0]
         zu = airfoil_data[:int(US),1]
         xl = airfoil_data[int(US):,0]
         zl = airfoil_data[int(US):,1]
+
     #--------------------------------------------------------------------------
     # Redistributing airfoil coords
     #--------------------------------------------------------------------------

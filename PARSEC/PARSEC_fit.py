@@ -27,8 +27,6 @@ def PARSEC_fit(xu_opt,zu_opt,xl_opt,zl_opt,N,xdist):
                 (-0.05,0.05)])  # TE thickness
 
         bounds = np.array(bounds) # converting bounds to numpy array
-        opt_x = None # initializing optimal design point
-        opt_f = np.inf # initializing optimal objective function value
         res = differential_evolution(func, bounds=bounds, tol=1e-5, disp=1) # calling differential evolution
 
         return res.x
