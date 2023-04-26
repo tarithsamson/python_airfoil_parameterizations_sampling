@@ -5,7 +5,6 @@ from readairfoil import *
 from scipy.stats import qmc
 from visualization import *
 
-
 #def Bspline(d, knots=knots, cp):
 #------------------------------------------------------------------------------
 # Load airfoil

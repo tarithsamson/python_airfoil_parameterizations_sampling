@@ -9,11 +9,11 @@ def PARSEC_fit_obj(X,N,xu_opt,zu_opt,xl_opt,zl_opt,xdist):
     El = 0 # initializing error for lower surface   
     
     for i in range(N):
-        du = abs(zu_opt[i]-zu[i])
-        dl = abs(zl_opt[i]-zl[i])
-        Eu = Eu + du
-        El = El + dl
+        du = abs(zu_opt[i]-zu[i]) # calculating the error at each point
+        dl = abs(zl_opt[i]-zl[i]) # calculating the error at each point
+        Eu = Eu + du # summing the errors to return a single scalar objective function value
+        El = El + dl # summing the errors to return a single scalar objective function value
 
-    E = Eu + El  # summing the errors to return a single scalar objective function value
+    E = Eu + El # summing the errors to return a single scalar objective function value
 
     return E
