@@ -52,4 +52,4 @@ def BSpline_fit(airfoil,N,xdist=None,numcp=15,t=None,k=3):
     if ubs.c[0][1] != 0: # If the first control point of the upper surface is not zero, set it to zero
         ubs.c[0][1] = 0
 
-    return ubs,lbs
+    return ubs.c,lbs.c

@@ -6,7 +6,7 @@ from visualization import *
 #------------------------------------------------------------------------------
 # User inputs
 #------------------------------------------------------------------------------
-airfoil = 'naca4412' # airfoil .dat name
+airfoil = 'rae2822' # airfoil .dat name
 N = 30 # number of points describing each of the airfoil's upper and lower surfaces
 n = 100 # number of samples
 dp = 5 # degree of polynomials

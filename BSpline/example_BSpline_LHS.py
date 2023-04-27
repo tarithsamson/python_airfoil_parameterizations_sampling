@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from CST_LHS import *
+from BSpline_LHS import *
 from visualization import *
 
 #------------------------------------------------------------------------------
