@@ -1,11 +1,11 @@
 import numpy as np
 import math
 
-def CST(aLw,aUp,N,xdist=None):
+def CST(Xz,N,xdist=None):
     #--------------------------------------------------------------------------
     # Input processing
     #--------------------------------------------------------------------------
-    n = 1
+    dp2,n = X.shape
     zu = np.zeros((N,n))
     zl = np.zeros((N,n))
     teGAP=0
@@ -28,7 +28,7 @@ def CST(aLw,aUp,N,xdist=None):
     #--------------------------------------------------------------------------
     # CST airfoil surface generation
     #--------------------------------------------------------------------------
-    dp = len(aLw)
+    dp = int(dp2/2)
     b = np.zeros(dp)
     px = np.zeros(dp)
     px1= np.zeros(dp)
@@ -37,8 +37,12 @@ def CST(aLw,aUp,N,xdist=None):
         px[i] = i+0.5
         px1[i] = dp-i
         
-    for i in range(N):
-        for j in range(dp):
-            zl[i] += aUp[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))+x[i]*teGAP/2
-            zu[i] += aLw[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))-x[i]*teGAP/2 # NOTE: THERE IS A REPEATED POINT AT (0,0) AND (1,0) IN BOTH SURFACES
+    for k in range(n):
+        aUp = X[0:int(dp),k]
+        aLw = X[int(dp):,k]
+        
+        for i in range(N):
+            for j in range(dp):
+                zl[i,k] += aUp[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))+x[i]*teGAP/2
+                zu[i,k] += aLw[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))-x[i]*teGAP/2 # NOTE: THERE IS A REPEATED POINT AT (0,0) AND (1,0) IN BOTH SURFACES
     return x,zu,x,zl

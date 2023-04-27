@@ -7,23 +7,22 @@ from CST_fit import *
 #------------------------------------------------------------------------------
 # Load target airfoil
 #------------------------------------------------------------------------------
-airfoil = 'rae2822' # airfoil .dat name
+airfoil = 'naca0012' # airfoil .dat name
 N = 30 # number of points describing each of the airfoil's upper and lower surfaces
+dp = 5 # degree of polynomials
 xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
 xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ) # generating N-1 x values from 0 to 1 whose distribution follows the formula
 xu_opt,zu_opt,xl_opt,zl_opt = readairfoil(airfoil,xdist=xdist) # load airfoil with the following distribution
 
 #------------------------------------------------------------------------------
-# Fit PARSEC surface to target airfoil
+# Fit CST surface to target airfoil
 #------------------------------------------------------------------------------
-opt_x = PARSEC_fit(xu_opt,zu_opt,xl_opt,zl_opt,N,xdist)
-
-print(opt_x)
+aLw, aUp = CST_fit(airfoil,dp,N)
 
 #------------------------------------------------------------------------------
-# Plot PARSEC surface and target airfoil
+# Plot CST surface and target airfoil
 #------------------------------------------------------------------------------
-xu,zu,xl,zl = PARSEC(opt_x,N,xdist=xdist) # generating airfoil with optimal design point
+xu,zu,xl,zl = CST(aLw,aUp,N,xdist=xdist) # generating airfoil with optimal design point
 # plotting
 fig = plt.figure(figsize=(6,9),dpi=(2**8))
 plt.plot(xu_opt,zu_opt,marker="o",label='Target Airfoil Upper Surface')
