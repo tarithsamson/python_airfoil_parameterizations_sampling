@@ -1,10 +1,10 @@
 from scipy.stats import qmc
 import numpy as np
 from readairfoil import *
-from PARSEC import *
-from PARSEC_fit import *
+from CST import *
+from CST_fit import *
 
-def PARSEC_LHS(airfoil,scale,N,n):
+def CST_LHS(airfoil,scale,N,n,dp):
     
     #------------------------------------------------------------------------------
     # Load target airfoil
@@ -14,9 +14,11 @@ def PARSEC_LHS(airfoil,scale,N,n):
     xu_opt,zu_opt,xl_opt,zl_opt = readairfoil(airfoil,xdist=xdist) # load airfoil with the following distribution
 
     #------------------------------------------------------------------------------
-    # Fit PARSEC surface to target airfoil
+    # Fit CST surface to target airfoil
     #------------------------------------------------------------------------------
-    opt_X = PARSEC_fit(xu_opt,zu_opt,xl_opt,zl_opt,N,xdist)
+    aLw, aUp = CST_fit(airfoil,dp,N)
+    
+    opt_X = np.concatenate((aLw,aUp),axis=0)
     
     #------------------------------------------------------------------------------
     # Get bounds for PARSEC surface
@@ -47,10 +49,10 @@ def PARSEC_LHS(airfoil,scale,N,n):
     zl = np.zeros((N,n))
     
     #------------------------------------------------------------------------------
-    # Generating PARSEC Airfoils
+    # Generating CST Airfoils
     #------------------------------------------------------------------------------
     for i in range(n):
-        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = PARSEC(X[:,i],N,xdist=xdist)
+        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = CST(X[0:dp,i],X[dp:,i],N,xdist=xdist)
     
     return xu,zu,xl,zl
 

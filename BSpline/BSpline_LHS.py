@@ -1,10 +1,10 @@
 from scipy.stats import qmc
 import numpy as np
 from readairfoil import *
-from PARSEC import *
-from PARSEC_fit import *
+from BSpline import *
+from BSpline_fit import *
 
-def PARSEC_LHS(airfoil,scale,N,n):
+def BSpline_LHS(airfoil,scale,N,n,dp):
     
     #------------------------------------------------------------------------------
     # Load target airfoil
