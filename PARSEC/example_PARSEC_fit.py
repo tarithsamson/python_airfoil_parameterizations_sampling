@@ -6,7 +6,7 @@ from PARSEC_fit import *
 #------------------------------------------------------------------------------
 # User inputs
 #------------------------------------------------------------------------------
-airfoil = 'rae2822' # airfoil .dat name
+airfoil = 'naca0010' # airfoil .dat name
 N = 30 # number of points describing each of the airfoil's upper and lower surfaces
 
 #------------------------------------------------------------------------------

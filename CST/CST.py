@@ -12,15 +12,16 @@ def CST(aLw,aUp,N,xdist=None):
     #--------------------------------------------------------------------------
     # x-data generation
     #--------------------------------------------------------------------------
-    if xdist is not None:
-        if N!=len(xdist):
+    if xdist is not None: # if xdist is provided, use it
+        if N!=len(xdist): # if N doesn't match length of xdist, return error
             print('Error. N doesn\'t match length of xdist')
             return
-        elif N==len(xdist):
+        elif N==len(xdist): # if N matches length of xdist, use it
             xu = xdist
             xl = xdist
-    else:
-        xdist = np.linspace(0,1,N)
+    else: # if xdist is not provided, generate it
+        xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
+        xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ) # generating N-1 x values from 0 to 1 whose distribution follows the formula
     
     x = xdist
     
@@ -40,4 +41,5 @@ def CST(aLw,aUp,N,xdist=None):
         for j in range(dp):
             zl[i] += aUp[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))+x[i]*teGAP/2
             zu[i] += aLw[j]*b[j]*((x[i])**(px[j]))*((1 - x[i])**(px1[j]))-x[i]*teGAP/2 # NOTE: THERE IS A REPEATED POINT AT (0,0) AND (1,0) IN BOTH SURFACES
+            
     return x,zu,x,zl

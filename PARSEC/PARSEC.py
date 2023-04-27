@@ -40,7 +40,6 @@ def PARSEC(X,N,xdist=None):
     #--------------------------------------------------------------------------
     # PARSEC airfoil surface generation
     #--------------------------------------------------------------------------
-    
     # 'P' coefficient matrix
     P = np.array([[x_U**0.5, x_U**1.5, x_U**2.5, x_U**3.5, x_U**4.5, x_U**5.5], 
                     [0.5*x_U**-0.5, 1.5*x_U**0.5, 2.5*x_U**1.5, 3.5*x_U**2.5, 4.5*x_U**3.5, 5.5*x_U**4.5],
@@ -89,6 +88,6 @@ def PARSEC(X,N,xdist=None):
 
     # calculating the upper and lower surface coords from the sextic polynomial eqn
     zu = a[0]*xu**0.5 + a[1]*xu**1.5 + a[2]*xu**2.5 + a[3]*xu**3.5 + a[4]*xu**4.5 + a[5]*xu**5.5    
-    zl = b[0]*xl**0.5 + b[1]*xl**1.5 + b[2]*xl**2.5 + b[3]*xl**3.5 + b[4]*xl**4.5 + b[5]*xl**5.5  
+    zl = b[0]*xl**0.5 + b[1]*xl**1.5 + b[2]*xl**2.5 + b[3]*xl**3.5 + b[4]*xl**4.5 + b[5]*xl**5.5  # NOTE: THERE IS A REPEATED POINT AT (0,0) AND (1,0) IN BOTH SURFACES
     
     return xu,zu,xl,zl
