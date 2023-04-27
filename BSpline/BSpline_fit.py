@@ -5,6 +5,8 @@ from readairfoil import *
 # def BSpline_fit(xu_opt,zu_opt,xl_opt,zl_opt,t=None,k=3):
 def BSpline_fit(airfoil,N,xdist=None,numcp=15,t=None,k=3):
 
+    N = numcp # number of control points
+
     #--------------------------------------------------------------------------
     # x-data generation
     #--------------------------------------------------------------------------
