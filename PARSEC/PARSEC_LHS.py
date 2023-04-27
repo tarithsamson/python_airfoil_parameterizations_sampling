@@ -5,18 +5,10 @@ from PARSEC import *
 from PARSEC_fit import *
 
 def PARSEC_LHS(airfoil,scale,N,n):
-    
-    #------------------------------------------------------------------------------
-    # Load target airfoil
-    #------------------------------------------------------------------------------
-    xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
-    xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ) # generating N-1 x values from 0 to 1 whose distribution follows the formula
-    xu_opt,zu_opt,xl_opt,zl_opt = readairfoil(airfoil,xdist=xdist) # load airfoil with the following distribution
-
     #------------------------------------------------------------------------------
     # Fit PARSEC surface to target airfoil
     #------------------------------------------------------------------------------
-    opt_X = PARSEC_fit(xu_opt,zu_opt,xl_opt,zl_opt,N,xdist)
+    opt_X = PARSEC_fit(airfoil,N) # calling the optimizer to find the optimal design point
     
     #------------------------------------------------------------------------------
     # Get bounds for PARSEC surface
@@ -50,7 +42,7 @@ def PARSEC_LHS(airfoil,scale,N,n):
     # Generating PARSEC Airfoils
     #------------------------------------------------------------------------------
     for i in range(n):
-        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = PARSEC(X[:,i],N,xdist=xdist)
+        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = PARSEC(X[:,i],N)
     
     return xu,zu,xl,zl
 

@@ -47,8 +47,9 @@ def readairfoil(airfoil,f='selig',DIR = '/home/tarith/Documents/work/uiuc_airfoi
         zl = fl(xdist) # redistributing the z coords of the lower surface to match the x coord distribution
         xl = xdist # assign xdist values to xl
         return xu,zu,xl,zl
-    elif N is not None and xdist is None: # if N is specified and xdist isn't specified, linearly redistribute the airfoil coords
-        xdist = np.linspace(0,1,num=N)
+    elif N is not None and xdist is None: # if N is specified and xdist isn't specified,  redistribute the airfoil coords to match the specified distribution
+        xi = np.arange(N) # generate ascending integers from 0 to 0 to N-1
+        xdist = 1.0 - np.cos( xi* (np.pi)/2.0/(N - 1.0) ) # generating N-1 x values from 0 to 1 whose distribution follows the formula
         fu = interp1d(xu,zu,fill_value="extrapolate") # initializing a 1D interpolation function to fit the upper surface
         zu = fu(xdist) # redistributing the z coords of the upper surface to match the x coord distribution
         xu = xdist # assign xdist values to xu

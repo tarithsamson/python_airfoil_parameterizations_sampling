@@ -4,7 +4,7 @@ Visualization
 ======================
 
 visualization.py
---------------
+----------------
 
 This function is used visualize the output of a design space sampling. 
 
