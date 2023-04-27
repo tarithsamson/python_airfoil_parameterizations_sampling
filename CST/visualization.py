@@ -30,12 +30,16 @@ def visualization(xu,zu,xl,zl,parametrization):
         
     fig = plt.figure(figsize=(6,9),dpi=(2**8))
     for i in range(n):
-        plt.plot(xu[:,i],zu[:,i],'b',linewidth=0.7) # plotting current sample's upper surface
-        plt.plot(xl[:,i],zl[:,i],'b',linewidth=0.7) # plottingcurrent sample's lower surface
-    plt.plot(xu[:,0],zu_max,color='red',marker='^',markersize=1.5,linewidth=0.7,label='Upper Surface Bound') # plotting current sample's maximum upper surface
-    plt.plot(xl[:,0],zl_min,color='red',marker='v',markersize=1.5,linewidth=0.7,label='Lower Surface Bound') # plotting current sample's minimum lower surface
-    plt.plot(xu[:,0],zu_mean,color='orange',marker='^',markersize=1.5,linewidth=0.7,label='Upper Surface Mean') # plotting current sample's mean upper surface
-    plt.plot(xl[:,0],zl_mean,color='orange',marker='v',markersize=1.5,linewidth=0.7,label='Lower Surface Surface') # plotting current sample's mean lower surface
+        plt.plot(xu[:,i],zu[:,i],color='blue',linewidth=0.2) # plotting current sample's upper surface
+        plt.plot(xl[:,i],zl[:,i],color='blue',linewidth=0.2) # plottingcurrent sample's lower surface
+    # plt.plot(xu[:,0],zu_max,color='red',marker='^',markersize=0.5,linewidth=0.5,label='Upper Surface Bound') # plotting current sample's maximum upper surface
+    # plt.plot(xl[:,0],zl_min,color='red',marker='v',markersize=0.5,linewidth=0.5,label='Lower Surface Bound') # plotting current sample's minimum lower surface
+    plt.plot(xu[:,0],zu_max,color='red',linewidth=0.5,label='Design Space Outer Bound') # plotting current sample's maximum upper surface
+    plt.plot(xl[:,0],zl_min,color='red',linewidth=0.5) # plotting current sample's minimum lower surface
+    # plt.plot(xu[:,0],zu_mean,color='orange',marker='^',markersize=0.5,linewidth=0.5,label='Upper Surface Mean') # plotting current sample's mean upper surface
+    # plt.plot(xl[:,0],zl_mean,color='orange',marker='v',markersize=0.5,linewidth=0.5,label='Lower Surface Surface') # plotting current sample's mean lower surface
+    plt.plot(xu[:,0],zu_mean,color='orange',linewidth=0.5,label='Design Space Mean') # plotting current sample's mean upper surface
+    plt.plot(xl[:,0],zl_mean,color='orange',linewidth=0.5) # plotting current sample's mean lower surface
     # plot settings
     plt.grid()
     plt.gca().set_aspect('equal', adjustable='box')
@@ -63,8 +67,8 @@ def visualization(xu,zu,xl,zl,parametrization):
     # for loop to iterate through rows, columns, and numsubplots to populate subplot grid
     for row in range(rows):
         for col in range(cols):
-            ax[row,col].plot(xu,zu[:,chosen[i]],'b',linewidth=0.7) # plotting current sample's upper surface
-            ax[row,col].plot(xl,zl[:,chosen[i]],'b',linewidth=0.7) # plottingcurrent sample's lower surface
+            ax[row,col].plot(xu,zu[:,chosen[i]],color='blue',linewidth=0.7) # plotting current sample's upper surface
+            ax[row,col].plot(xl,zl[:,chosen[i]],color='blue',linewidth=0.7) # plottingcurrent sample's lower surface
             ax[row,col].set_aspect('equal', 'box') # setting sunplot aspect ratio to equal
             ax[row,col].axis('off') # turning axis/grid off for aethetic purposes
             i = i + 1 # increasing iteration counter by 1 to populate the next grid location with the next chosen sample

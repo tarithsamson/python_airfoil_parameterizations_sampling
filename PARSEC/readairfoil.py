@@ -4,8 +4,8 @@
 import numpy as np
 from scipy.interpolate import interp1d
 
-def readairfoil(airfoil,f='selig',DIR = 'D:/work/uiuc_airfoil_database/',N=None,xdist=None):
-#def readairfoil(airfoil,f='selig',DIR = '/home/tarith/Documents/work/uiuc_airfoil_database/',N=None,xdist=None):
+# def readairfoil(airfoil,f='selig',DIR = 'D:/work/uiuc_airfoil_database/',N=None,xdist=None):
+def readairfoil(airfoil,f='selig',DIR = '/home/tarith/Documents/work/uiuc_airfoil_database/',N=None,xdist=None):
     
     #--------------------------------------------------------------------------
     # Read lednicer format airfoil
