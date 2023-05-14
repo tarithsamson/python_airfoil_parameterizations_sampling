@@ -4,11 +4,11 @@ from readairfoil import *
 from PARSEC import *
 from PARSEC_fit import *
 
-def PARSEC_LHS(airfoil,scale,N,n):
+def PARSEC_LHS(airfoil,scale,Nfit,Ngen,n):
     #------------------------------------------------------------------------------
     # Fit PARSEC surface to target airfoil
     #------------------------------------------------------------------------------
-    opt_X = PARSEC_fit(airfoil,N) # calling the optimizer to find the optimal design point
+    opt_X = PARSEC_fit(airfoil,Nfit) # calling the optimizer to find the optimal design point
     
     #------------------------------------------------------------------------------
     # Get bounds for PARSEC surface
@@ -33,16 +33,15 @@ def PARSEC_LHS(airfoil,scale,N,n):
     X = qmc.scale(sample,l_bounds,u_bounds) # creates matrix of samples, n rows by d columns
     X = np.transpose(X)
     
-    xu = np.zeros((N,n))
-    zu = np.zeros((N,n))
-    xl = np.zeros((N,n))
-    zl = np.zeros((N,n))
+    xu = np.zeros((Ngen,n))
+    zu = np.zeros((Ngen,n))
+    xl = np.zeros((Ngen,n))
+    zl = np.zeros((Ngen,n))
     
     #------------------------------------------------------------------------------
     # Generating PARSEC Airfoils
     #------------------------------------------------------------------------------
     for i in range(n):
-        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = PARSEC(X[:,i],N)
+        xu[:,i],zu[:,i],xl[:,i],zl[:,i] = PARSEC(X[:,i],Ngen)
     
     return xu,zu,xl,zl
-

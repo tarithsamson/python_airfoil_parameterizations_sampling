@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BSpline Airfoil Parametrization Method &mdash; LHS of Parametrizations  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LHS Study" href="lhs_study.html" />
+    <link rel="prev" title="CST Airfoil Parametrization Method" href="CST_parametrization_method.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LHS of Parametrizations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readairfoil.html">Reading Airfoil Data from the UIUC Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PARSEC_parametrization_method.html">Parsec Airfoil Parametrization Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CST_parametrization_method.html">CST Airfoil Parametrization Method</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BSpline Airfoil Parametrization Method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bspline-py">BSpline.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bspline-fit-py">BSpline_fit.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-fitting-a-bspline-surface-to-a-rae2822-and-plotting-the-results">Example: Fitting a BSpline surface to a RAE2822 and plotting the results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lhs_study.html">LHS Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LHS of Parametrizations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">BSpline Airfoil Parametrization Method</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/BSpline_parametrization_method.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bspline-airfoil-parametrization-method">
+<span id="bspline-parametrization-method"></span><h1>BSpline Airfoil Parametrization Method<a class="headerlink" href="#bspline-airfoil-parametrization-method" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>The BSpline parametrization method is an airfoil parametrization method that is constructed by combining a set of control points with a set of basis functions. The control points determine the shape of the curve, while the basis functions determine how the curve is constructed. The basis functions are defined recursively using a set of knots, which are the points where the B-spline transitions from one basis function to the next.</p>
+<div class="math notranslate nohighlight">
+\[S(x)=\sum_{j=0}^{n-1} c_j B_{j, k ; t}(x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(B_{j, k ; t}\)</span> are B-spline basis functions of degree <span class="math notranslate nohighlight">\(k\)</span> and knots <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>B-spline basis elements are defined via</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{r}
+B_{i, 0}(x)=1, \text{ if } t_i \leq x&lt;t_{i+1} \text{, otherwise } 0, \\
+B_{i, k}(x)=\frac{x-t_i}{t_{i+k}-t_i} B_{i, k-1}(x)+\frac{t_{i+k+1}-x}{t_{i+k+1}-t_{i+1}} B_{i+1, k-1}(x)
+\end{array}\end{split}\]</div>
+<p>This code uses Scipy’s implementation of the B-spline basis functions to both fit a B-spline to an airfoil and to create a new airfoil from a set of control points. More information can be found in the Scipy documentation: <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BSpline.html</a></p>
+</section>
+<section id="bspline-py">
+<h2>BSpline.py<a class="headerlink" href="#bspline-py" title="Permalink to this heading"></a></h2>
+<p>This function is used to generate a BSpline given a set of input parameters.</p>
+<p>The input parameters to the BSpline function are:</p>
+<ul class="simple">
+<li><p><strong>X</strong>: a 1-D list or array where <code class="docutils literal notranslate"><span class="pre">X=[x_cp1,</span> <span class="pre">x_cp2,</span> <span class="pre">x_cp3,</span> <span class="pre">...,</span> <span class="pre">z_cp1,</span> <span class="pre">z_cp2,</span> <span class="pre">z_cp3,</span> <span class="pre">...]</span></code>. The first half of the list are the x-coordinates of the control points, while the second half are the z-coordinates of the control points.</p></li>
+<li><p><strong>N</strong>: an int that specifies the number of points to generate on the upper and lower surfaces</p></li>
+<li><p><strong>d</strong>: an int that specifies the degree of the BSpline the surface</p></li>
+<li><p><strong>k</strong>: a 1-D array of non-decreasing knots that control the B-Spline basis functions</p></li>
+<li><p><strong>xdist</strong>: a 1-D numpy array of x-coordinates at which the upper and lower surfaces are evaluated. If this parameter is not provided, the points will be generated uniformly between 0 and 1.</p></li>
+</ul>
+<p>The outputs of the BSpline function are:</p>
+<ul class="simple">
+<li><p><strong>xu</strong>: a 1-D numpy array of the x-coordinates of the upper surface</p></li>
+<li><p><strong>zu</strong>: a 1-D numpy array of the z-coordinates of the upper surface</p></li>
+<li><p><strong>xl</strong>: a 1-D numpy array of the x-coordinates of the lower surface</p></li>
+<li><p><strong>zl</strong>: a 1-D numpy array of the z-coordinates of the lower surface</p></li>
+</ul>
+</section>
+<section id="bspline-fit-py">
+<h2>BSpline_fit.py<a class="headerlink" href="#bspline-fit-py" title="Permalink to this heading"></a></h2>
+<p>This function is used to fit a BSpline to a set of airfoil coordinates.</p>
+<p>The input parameters to the BSpline_fit function are:</p>
+<ul class="simple">
+<li><p><strong>xu</strong>: a 1-D numpy array of the x-coordinates of the upper surface of the target airfoil</p></li>
+<li><p><strong>zu</strong>: a 1-D numpy array of the z-coordinates of the upper surface of the target airfoil</p></li>
+<li><p><strong>xl</strong>: a 1-D numpy array of the x-coordinates of the lower surface of the target airfoil</p></li>
+<li><p><strong>zl</strong>: a 1-D numpy array of the z-coordinates of the lower surface of the target airfoil</p></li>
+<li><p><strong>d</strong>: an int that specifies the degree of the BSpline the surface</p></li>
+<li><p><strong>k</strong>: a 1-D array of non-decreasing knots that control the B-Spline basis functions</p></li>
+<li><p><strong>ncp</strong>: an int that specifies that number of control points of the BSpline surface</p></li>
+</ul>
+<p>The outputs of the BSpline_fit function are:</p>
+<ul class="simple">
+<li><p><strong>X</strong>: a 1-D list or array where <code class="docutils literal notranslate"><span class="pre">X=[x_cp1,</span> <span class="pre">x_cp2,</span> <span class="pre">x_cp3,</span> <span class="pre">...,</span> <span class="pre">z_cp1,</span> <span class="pre">z_cp2,</span> <span class="pre">z_cp3,</span> <span class="pre">...]</span></code>. The first half of the list are the x-coordinates of the control points, while the second half are the z-coordinates of the control points.</p></li>
+</ul>
+</section>
+<section id="example-fitting-a-bspline-surface-to-a-rae2822-and-plotting-the-results">
+<h2>Example: Fitting a BSpline surface to a RAE2822 and plotting the results<a class="headerlink" href="#example-fitting-a-bspline-surface-to-a-rae2822-and-plotting-the-results" title="Permalink to this heading"></a></h2>
+<p>Here’s an example Python code snippet that uses the BSpline_fit.py to fit a PARSEC surface to an RAE2822 airfoil:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">readairfoil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">BSpline_fit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">readairfoil</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">airfoil</span> <span class="o">=</span> <span class="s1">&#39;rae2822&#39;</span> <span class="c1"># airfoil .dat name</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># number of points describing each of the airfoil&#39;s upper and lower surfaces</span>
+<span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># generate ascending integers from 0 to 0 to N-1</span>
+<span class="n">xdist</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="n">xi</span><span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1"># generating N-1 x values from 0 to 1 whose distribution follows the formula</span>
+<span class="n">xu</span><span class="p">,</span><span class="n">zu</span><span class="p">,</span><span class="n">xl</span><span class="p">,</span><span class="n">zl</span> <span class="o">=</span> <span class="n">readairfoil</span><span class="p">(</span><span class="n">airfoil</span><span class="p">,</span><span class="n">xdist</span><span class="o">=</span><span class="n">xdist</span><span class="p">)</span> <span class="c1"># load airfoil with the following distribution</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">B_Spline_fit</span><span class="p">(</span><span class="n">xu</span><span class="p">,</span><span class="n">zu</span><span class="p">,</span><span class="n">xl</span><span class="p">,</span><span class="n">zl</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ncp</span><span class="p">)</span> <span class="c1"># fit BSpline surface to airfoil</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CST_parametrization_method.html" class="btn btn-neutral float-left" title="CST Airfoil Parametrization Method" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lhs_study.html" class="btn btn-neutral float-right" title="LHS Study" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tarith George Samson.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

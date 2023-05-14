@@ -15,7 +15,7 @@ sixth order polynomial:
 
 where :math:`a_{i}, i=1, \ldots, 6`, are the polynomial coefficients,
 and :math:`x` is the nondimensional chordwise location,
-:math:`0 \leq x \leq 1`. The coefficients, shown in Fig. 7.4, are
+:math:`0 \leq x \leq 1`. The coefficients are
 determined by six geometrical constraints.
 
 #. Maximum upper surface :math:`z`-coordinate :math:`z_{U}` at
@@ -51,7 +51,6 @@ determined by six geometrical constraints.
 Below is a figure showing the geometrical constraints:
 
 .. image:: Images/PARSEC_parameters.png
-   :alt: Alternative text
 
 The LE of the airfoil is at the origin, so
 :math:`\left(x_{c}, z_{c}\right)=(0,0)`. We can write:

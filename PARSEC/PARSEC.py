@@ -22,47 +22,47 @@ def PARSEC(X,N,xdist=None):
     # Input parameters
     #--------------------------------------------------------------------------
     # upper surface DVs
-    x_U = X[0]      # x coord of maximum z coord of the upper surface
-    z_U = X[1]      # maximum z coord of the upper surface
-    z_xxU = X[2]    # curvature of upper surface at maximum z-coord
+    X_U = X[0]      # x coord of maximum z coord of the upper surface
+    Z_U = X[1]      # maximum z coord of the upper surface
+    Z_xxU = X[2]    # curvature of upper surface at maximum z-coord
     R_U = X[3]      # LE radius of the upper surface 
     # lower surface DVs
-    x_L = X[4]      # x coord of maximum z coord of the upper surface
-    z_L = X[5]      # maximum z coord of the upper surface
-    z_xxL = X[6]    # curvature of lower surface at minimum z-coord
+    X_L = X[4]      # x coord of maximum z coord of the upper surface
+    Z_L = X[5]      # maximum z coord of the upper surface
+    Z_xxL = X[6]    # curvature of lower surface at minimum z-coord
     R_L = X[7]      # LE radius of the upper surface
     # TE DVs
-    theta_TE = X[8] # TE angle (measured from the horizontal) in radians
-    beta_TE = X[9]  # TE wedge angle in radians
-    T_off = X[10]  # TE offset
-    T_TE = X[11]   # TE thickness
+    theta_TE = X[8] # TE angle (measured from the horizontal) in degrees
+    beta_TE = X[9]  # TE wedge angle in degrees
+    t_off = X[10]   # TE offset
+    t_TE = X[11]    # TE thickness
 
     #--------------------------------------------------------------------------
     # PARSEC airfoil surface generation
     #--------------------------------------------------------------------------
     # 'P' coefficient matrix
-    P = np.array([[x_U**0.5, x_U**1.5, x_U**2.5, x_U**3.5, x_U**4.5, x_U**5.5], 
-                    [0.5*x_U**-0.5, 1.5*x_U**0.5, 2.5*x_U**1.5, 3.5*x_U**2.5, 4.5*x_U**3.5, 5.5*x_U**4.5],
-                    [-0.25*x_U**-1.5, 0.75*x_U**-0.5, 3.75*x_U**0.5, 8.75*x_U**1.5, 15.75*x_U**2.5, 24.75*x_U**3.5],
+    P = np.array([[X_U**0.5, X_U**1.5, X_U**2.5, X_U**3.5, X_U**4.5, X_U**5.5], 
+                    [0.5*X_U**-0.5, 1.5*X_U**0.5, 2.5*X_U**1.5, 3.5*X_U**2.5, 4.5*X_U**3.5, 5.5*X_U**4.5],
+                    [-0.25*X_U**-1.5, 0.75*X_U**-0.5, 3.75*X_U**0.5, 8.75*X_U**1.5, 15.75*X_U**2.5, 24.75*X_U**3.5],
                     [1, 1, 1, 1, 1, 1],
                     [0.5, 1.5, 2.5, 3.5, 4.5, 5.5],
                     [1, 0, 0, 0, 0, 0]                
                     ])
 
     # 'E' coefficient matrix
-    E = np.array([[x_L**0.5, x_L**1.5, x_L**2.5, x_L**3.5, x_L**4.5, x_L**5.5], 
-                    [0.5*x_L**-0.5, 1.5*x_L**0.5, 2.5*x_L**1.5, 3.5*x_L**2.5, 4.5*x_L**3.5, 5.5*x_L**4.5],
-                    [-0.25*x_L**-1.5, 0.75*x_L**-0.5, 3.75*x_L**0.5, 8.75*x_L**1.5, 15.75*x_L**2.5, 24.75*x_L**3.5],
+    E = np.array([[X_L**0.5, X_L**1.5, X_L**2.5, X_L**3.5, X_L**4.5, X_L**5.5], 
+                    [0.5*X_L**-0.5, 1.5*X_L**0.5, 2.5*X_L**1.5, 3.5*X_L**2.5, 4.5*X_L**3.5, 5.5*X_L**4.5],
+                    [-0.25*X_L**-1.5, 0.75*X_L**-0.5, 3.75*X_L**0.5, 8.75*X_L**1.5, 15.75*X_L**2.5, 24.75*X_L**3.5],
                     [1, 1, 1, 1, 1, 1],
                     [0.5, 1.5, 2.5, 3.5, 4.5, 5.5],
                     [1, 0, 0, 0, 0, 0]                
                     ])
     
     # 'q' coefficient matrix
-    q = np.array([z_U, 0, z_xxU, T_off + 0.5*T_TE, np.tan(np.radians(theta_TE-0.5*beta_TE)), np.sqrt(2*R_U)]) 
+    q = np.array([Z_U, 0, Z_xxU, t_off + 0.5*t_TE, np.tan(np.radians(theta_TE-0.5*beta_TE)), np.sqrt(2*R_U)]) 
     
     # 'v' coefficient matrix
-    v = np.array([z_L, 0, z_xxL, T_off- 0.5*T_TE, np.tan(np.radians(theta_TE+0.5*beta_TE)), -np.sqrt(2*R_L)]) 
+    v = np.array([Z_L, 0, Z_xxL, t_off- 0.5*t_TE, np.tan(np.radians(theta_TE+0.5*beta_TE)), -np.sqrt(2*R_L)]) 
     
     a = np.linalg.lstsq(P,q)[0]
     b = np.linalg.lstsq(E,v)[0]

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parsec Airfoil Parametrization Method &mdash; LHS of Parametrizations  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CST Airfoil Parametrization Method" href="CST_parametrization_method.html" />
+    <link rel="prev" title="Reading Airfoil Data from the UIUC Database" href="readairfoil.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LHS of Parametrizations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readairfoil.html">Reading Airfoil Data from the UIUC Database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Parsec Airfoil Parametrization Method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parsec-py">PARSEC.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parsec-fit-py">PARSEC_fit.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-fitting-a-parsec-surface-to-a-rae2822-and-plotting-the-results">Example: Fitting a PARSEC surface to a RAE2822 and plotting the results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CST_parametrization_method.html">CST Airfoil Parametrization Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BSpline_parametrization_method.html">BSpline Airfoil Parametrization Method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lhs_study.html">LHS Study</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LHS of Parametrizations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Parsec Airfoil Parametrization Method</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/PARSEC_parametrization_method.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="parsec-airfoil-parametrization-method">
+<span id="parsec-parametrization-method"></span><h1>Parsec Airfoil Parametrization Method<a class="headerlink" href="#parsec-airfoil-parametrization-method" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>The PARSEC airfoil parameterization was developed by Sobieczky in 1998.</p>
+<p>In the PARSEC method, the upper surface of the airfoil is described by a
+sixth order polynomial:</p>
+<div class="math notranslate nohighlight">
+\[z_{u}(x)=\sum_{i=1}^{6} a_{i} x^{i-(1 / 2)},\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_{i}, i=1, \ldots, 6\)</span>, are the polynomial coefficients,
+and <span class="math notranslate nohighlight">\(x\)</span> is the nondimensional chordwise location,
+<span class="math notranslate nohighlight">\(0 \leq x \leq 1\)</span>. The coefficients, shown in Fig. 7.4, are
+determined by six geometrical constraints.</p>
+<ol class="arabic simple">
+<li><p>Maximum upper surface <span class="math notranslate nohighlight">\(z\)</span>-coordinate <span class="math notranslate nohighlight">\(z_{U}\)</span> at
+<span class="math notranslate nohighlight">\(x_{U}\)</span>, i.e.:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[z_{u}\left(x_{U}\right)=z_{U}\]</div>
+<ol class="arabic simple" start="2">
+<li><p>First order derivative is zero at <span class="math notranslate nohighlight">\(x_{U}\)</span>, i.e.:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\left.\frac{d z_{u}}{d x}\right|_{x=x_{U}}=0\]</div>
+<ol class="arabic simple" start="3">
+<li><p>Prescribed second order derivative <span class="math notranslate nohighlight">\(z_{x x U}\)</span> at
+<span class="math notranslate nohighlight">\(x_{U}\)</span>, i.e.:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\left.\frac{d^{2} z_{u}}{d x^{2}}\right|_{x=x_{U}}=z_{x x U}\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Trailing edge (TE) off-set, <span class="math notranslate nohighlight">\(t_{\text {off }}\)</span>, and thickness,
+<span class="math notranslate nohighlight">\(t_{T E}\)</span>, i.e.:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[z_{u}(x=1)=t_{o f f}+\frac{1}{2} t_{T E}\]</div>
+<ol class="arabic simple" start="5">
+<li><p>TE direction angle, <span class="math notranslate nohighlight">\(\theta_{T E}\)</span>, and wedge angle,
+<span class="math notranslate nohighlight">\(\beta_{T E}\)</span>, i.e.:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\left.\frac{d z_{u}}{d x}\right|_{x=1}=\tan \left(\theta_{T E}-\frac{1}{2} \beta_{T E}\right)\]</div>
+<ol class="arabic simple" start="6">
+<li><p>Prescribed LE radius of upper surface, <span class="math notranslate nohighlight">\(R_{U}\)</span>. A circle at
+<span class="math notranslate nohighlight">\(\left(x_{c}, z_{c}\right)\)</span> with a radius <span class="math notranslate nohighlight">\(R_{U}\)</span>, and is
+defined as:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\left(x-x_{c}\right)^{2}+\left(z-z_{c}\right)^{2}=R_{U}\]</div>
+<p>Below is a figure showing the geometrical constraints:</p>
+<img alt="_images/PARSEC_parameters.png" id="fig-my-figure" src="_images/PARSEC_parameters.png" />
+<p>The LE of the airfoil is at the origin, so
+<span class="math notranslate nohighlight">\(\left(x_{c}, z_{c}\right)=(0,0)\)</span>. We can write:</p>
+<div class="math notranslate nohighlight">
+\[z=\left(2 R_{U}-x\right)^{1 / 2} \cdot x^{1 / 2}\]</div>
+<p>The upper surface polynomial can be written as:</p>
+<div class="math notranslate nohighlight">
+\[z_{u}=a_{1} \cdot x^{1 / 2}+\sum_{i=2}^{6} a_{i} x^{i-(1 / 2)} .\]</div>
+<p>Comparing the two above equations for small <span class="math notranslate nohighlight">\(x\)</span>, we obtain:</p>
+<div class="math notranslate nohighlight">
+\[a_{1} \cdot x^{1 / 2} \approx\left(2 R_{U}\right)^{1 / 2}\]</div>
+<p>which is the condition that has been met at the LE. The above geometrical
+constraints form a linear system of
+equations:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol {P a=q}\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{P}=\left[\begin{array}{cccccc}
+x_{U}^{1 / 2} &amp; x_{U}^{3 / 2} &amp; x_{U}^{5 / 2} &amp; x_{U}^{7 / 2} &amp; x_{U}^{9 / 2} &amp; x_{U}^{11 / 2} \\
+1 / 2 x_{U}^{-1 / 2} &amp; 3 / 2 x_{U}^{1 / 2} &amp; 5 / 2 x_{U}^{3 / 2} &amp; 7 / 2 x_{U}^{5 / 2} &amp; 9 / 2 x_{U}^{7 / 2} &amp; 11 / 2 x_{U}^{9 / 2} \\
+-1 / 4 x_{U}^{-3 / 2} &amp; 3 / 4 x_{U}^{-1 / 2} &amp; 15 / 4 x_{U}^{1 / 2} &amp; 35 / 4 x_{U}^{3 / 2} &amp; 63 / 4 x_{U}^{5 / 2} &amp; 99 / 4 x_{U}^{7 / 2} \\
+1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \\
+1 / 2 &amp; 3 / 2 &amp; 5 / 2 &amp; 7 / 2 &amp; 9 / 2 &amp; 11 / 2 \\
+1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{array}\right]\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gathered}
+\boldsymbol{q}=\left[\begin{array}{c}
+z_{U} \\
+0 \\
+z_{x x U} \\
+t_{\text {off }}+1 / 2 t_{T E} \\
+\tan \left(\theta_{T E}-1 / 2 \beta_{T E}\right) \\
+\left(2 R_{U}\right)^{1 / 2}
+\end{array}\right] \\
+\boldsymbol{a}=\left[\begin{array}{lll}
+a_{1} &amp; \cdots &amp; a_{6}
+\end{array}\right]^{T} .
+\end{gathered}\end{split}\]</div>
+<p>The linear system has a unique solution given by:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol {a={P}^{-1} q}\]</div>
+<p>The lower surface is configured in a similar fashion. We have:</p>
+<div class="math notranslate nohighlight">
+\[z_{l}(x)=\sum_{i=1}^{6} b_{i} x^{i-(1 / 2)},\]</div>
+<p>with the following constraints:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gathered}
+z_{l}\left(x_{L}\right)=z_{L} \\
+\left.\frac{d^{2} z_{l}}{d x^{2}}\right|_{x=x_{L}}=z_{x x L}, \\
+z_{l}(x=1)=t_{\text {off }}-\frac{1}{2} t_{T E},
+\end{gathered}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gathered}
+\left.\frac{d z_{l}}{d x}\right|_{x=1}=\tan \left(\theta_{T E}+\frac{1}{2} \beta_{T E}\right), \\
+b_{1} \cdot x^{1 / 2} \approx-\left(2 R_{L}\right)^{1 / 2}
+\end{gathered}\end{split}\]</div>
+<p>The linear system of equations is:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{Eb=v}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathrm{E}=\mathrm{P}\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gathered}
+\boldsymbol{v}=\left[\begin{array}{c}
+z_{L} \\
+0 \\
+z_{x x L} \\
+t_{o f f}-1 / 2 t_{T E} \\
+\tan \left(\theta_{T E}+1 / 2 \beta_{T E}\right) \\
+-\left(2 R_{L}\right)^{1 / 2}
+\end{array}\right] \\
+\boldsymbol{b}=\left[\begin{array}{lll}
+b_{1} &amp; \cdots &amp; b_{6}
+\end{array}\right]^{T} .
+\end{gathered}\end{split}\]</div>
+<p>The solution to the matrix equation is:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol {b={E}^{-1} v}\]</div>
+<p>Altogether, there are 12 parameters in the PARSEC formulation. Some of
+the parameters can be fixed during an optimization. For example, setting
+<span class="math notranslate nohighlight">\(t_{T E}=0\)</span> will yield a sharp closed TE. Also, it is possible to
+work only on the upper or the lower surface.</p>
+</section>
+<section id="parsec-py">
+<h2>PARSEC.py<a class="headerlink" href="#parsec-py" title="Permalink to this heading"></a></h2>
+<p>This function is used to generate a PARSEC surface given a set of input parameters.</p>
+<p>The input parameters to the PARSEC function are:</p>
+<ul class="simple">
+<li><p><strong>X</strong>: a 1-D list or array where <code class="docutils literal notranslate"><span class="pre">X=[x_U,</span> <span class="pre">z_U,</span> <span class="pre">z_xxU,</span> <span class="pre">R_U,</span> <span class="pre">x_L,</span> <span class="pre">z_L,</span> <span class="pre">z_xxL,</span> <span class="pre">R_L,</span> <span class="pre">theta_TE,</span> <span class="pre">beta_TE]</span></code></p></li>
+<li><p><strong>N</strong>: an int that specifies the number of points to generate on the upper and lower surfaces</p></li>
+<li><p><strong>xdist</strong>: a 1-D numpy array of x-coordinates at which the upper and lower surfaces are evaluated. If this parameter is not provided, the points will be generated uniformly between 0 and 1.</p></li>
+</ul>
+<p>The outputs of the PARSEC function are:</p>
+<ul class="simple">
+<li><p><strong>xu</strong>: a 1-D numpy array of the x-coordinates of the upper surface</p></li>
+<li><p><strong>zu</strong>: a 1-D numpy array of the z-coordinates of the upper surface</p></li>
+<li><p><strong>xl</strong>: a 1-D numpy array of the x-coordinates of the lower surface</p></li>
+<li><p><strong>zl</strong>: a 1-D numpy array of the z-coordinates of the lower surface</p></li>
+</ul>
+</section>
+<section id="parsec-fit-py">
+<h2>PARSEC_fit.py<a class="headerlink" href="#parsec-fit-py" title="Permalink to this heading"></a></h2>
+<p>This function is used to fit PARSEC parameters to a set of airfoil coordinates.</p>
+<p>The input parameters to the PARSEC_fit function are:</p>
+<ul class="simple">
+<li><p><strong>xu</strong>: a 1-D numpy array of the x-coordinates of the upper surface of the target airfoil</p></li>
+<li><p><strong>zu</strong>: a 1-D numpy array of the z-coordinates of the upper surface of the target airfoil</p></li>
+<li><p><strong>xl</strong>: a 1-D numpy array of the x-coordinates of the lower surface of the target airfoil</p></li>
+<li><p><strong>zl</strong>: a 1-D numpy array of the z-coordinates of the lower surface of the target airfoil</p></li>
+</ul>
+<p>The outputs of the PARSEC function are:</p>
+<ul class="simple">
+<li><p><strong>X</strong>: a 1-D list or array where <code class="docutils literal notranslate"><span class="pre">X=[x_U,</span> <span class="pre">z_U,</span> <span class="pre">z_xxU,</span> <span class="pre">R_U,</span> <span class="pre">x_L,</span> <span class="pre">z_L,</span> <span class="pre">z_xxL,</span> <span class="pre">R_L,</span> <span class="pre">theta_TE,</span> <span class="pre">beta_TE]</span></code></p></li>
+</ul>
+</section>
+<section id="example-fitting-a-parsec-surface-to-a-rae2822-and-plotting-the-results">
+<h2>Example: Fitting a PARSEC surface to a RAE2822 and plotting the results<a class="headerlink" href="#example-fitting-a-parsec-surface-to-a-rae2822-and-plotting-the-results" title="Permalink to this heading"></a></h2>
+<p>Here’s an example Python code snippet that uses the PARSEC_fit.py to fit a PARSEC surface to an RAE2822 airfoil:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># import packages</span>
+<span class="kn">from</span> <span class="nn">readairfoil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PARSEC_fit</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">readairfoil</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">airfoil</span> <span class="o">=</span> <span class="s1">&#39;rae2822&#39;</span> <span class="c1"># airfoil .dat name</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># number of points describing each of the airfoil&#39;s upper and lower surfaces</span>
+<span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># generate ascending integers from 0 to 0 to N-1</span>
+<span class="n">xdist</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="n">xi</span><span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="o">/</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1"># generating N-1 x values from 0 to 1 whose distribution follows the formula</span>
+<span class="n">xu</span><span class="p">,</span><span class="n">zu</span><span class="p">,</span><span class="n">xl</span><span class="p">,</span><span class="n">zl</span> <span class="o">=</span> <span class="n">readairfoil</span><span class="p">(</span><span class="n">airfoil</span><span class="p">,</span><span class="n">xdist</span><span class="o">=</span><span class="n">xdist</span><span class="p">)</span> <span class="c1"># load airfoil with the following distribution</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">PARSEC_fit</span><span class="p">(</span><span class="n">xu</span><span class="p">,</span><span class="n">zu</span><span class="p">,</span><span class="n">xl</span><span class="p">,</span><span class="n">zl</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">xdist</span><span class="p">)</span> <span class="c1"># fit PARSEC surface to airfoil</span>
+</pre></div>
+</div>
+<p>Below is the resulting plot:</p>
+<img alt="Alternative text" src="_images/PARSEC_fit_example.png" />
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="readairfoil.html" class="btn btn-neutral float-left" title="Reading Airfoil Data from the UIUC Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CST_parametrization_method.html" class="btn btn-neutral float-right" title="CST Airfoil Parametrization Method" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tarith George Samson.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

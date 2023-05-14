@@ -42,6 +42,6 @@ def PARSEC_fit(airfoil,N,xdist=None):
 			(-0.05,0.05)])  # TE thickness
 
 	bounds = np.array(bounds) # converting bounds to numpy array
-	res = differential_evolution(func, bounds=bounds, tol=1e-5, disp=1) # calling differential evolution
+	res = differential_evolution(func, bounds=bounds, tol=1e-4, disp=1) # calling differential evolution
 
 	return res.x 
